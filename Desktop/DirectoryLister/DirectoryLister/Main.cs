@@ -8,12 +8,15 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using System.Security.AccessControl;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace DirectoryLister
 {
     public partial class MainForm : Form
     {
         string diree = "";
+        bool clipboardEmpty = false;
         public MainForm()
         {
             InitializeComponent();
@@ -267,10 +270,12 @@ namespace DirectoryLister
         private void dirsTreeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
             //MessageBox.Show(e.Node.Tag.ToString());
+            if (e.Node.Tag.ToString() != null)
+            {
             diree = e.Node.Tag.ToString();
             //Path.Text = diree;
             label1.Text = diree; // showing the current path
-
+            }
             //comboBox1.Items.Clear();
 
             DirectoryInfo directoryInfo = new DirectoryInfo(diree.Substring(0, diree.LastIndexOf('\\') + 1));
@@ -333,6 +338,16 @@ namespace DirectoryLister
                 }
             }
 
+            //diree = "C:\\";
+            this.Hide();
+            dirsTreeView.Refresh();
+            MainForm d1 = new MainForm();
+            
+            d1.Show();
+            d1.Refresh();
+
+
+
         }
 
         private void dirsTreeView_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
@@ -372,6 +387,7 @@ namespace DirectoryLister
             List<string> Sfiles = new List<string>();
             List<string> Allfiles = new List<string>();
             List<string> AllFolders = new List<string>();
+            bool found = false;
 
             //bool found = false;
             try
@@ -383,7 +399,15 @@ namespace DirectoryLister
                         // Display file path.
                         //Allfiles.Add(file);
                         MessageBox.Show(file);
+                        found = true;
                     }
+
+                    if (!found)
+                    {
+                        MessageBox.Show(textBox_Search.Text + " not found.");
+                    }
+
+                    
 
                     //var allFiles = Directory.GetFiles(comboBox1.SelectedItem.ToString(), textBox_Search.Text, SearchOption.AllDirectories);
                     //foreach (String file in allFiles)
@@ -404,7 +428,15 @@ namespace DirectoryLister
                     {
                         // Display file path.
                         MessageBox.Show(folder);
+                        found = true;
                     }
+
+                    if (!found)
+                    {
+                        MessageBox.Show(textBox_Search.Text + " not found.");
+                    }
+
+                    
                 }
 
             }
@@ -416,11 +448,13 @@ namespace DirectoryLister
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
+                found = false;
             }
 
             foreach (string file in Sfiles)
             {
                 MessageBox.Show(file);
+                found = false;
             }
 
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -502,14 +536,19 @@ namespace DirectoryLister
             {
                 foreach (DirectoryInfo directory in directories)
                 {
-                    foreach (FileInfo file in directory.GetFiles())
+                    try
                     {
-                        if (file.Exists && file.Name == dirsTreeView.SelectedNode.Text)
+
+                        foreach (FileInfo file in directory.GetFiles())
                         {
-                            file.Delete();
-                            deleted = true;
+                            if (file.Exists && file.Name == dirsTreeView.SelectedNode.Text)
+                            {
+                                file.Delete();
+                                deleted = true;
+                            }
                         }
                     }
+                    catch (UnauthorizedAccessException ex) { }
 
                     if (dirsTreeView.SelectedNode.Text == directory.Name)
                     {
@@ -602,7 +641,13 @@ namespace DirectoryLister
 
             MessageBox.Show("Paste NOW!!!!"); // can add check to see if file/folder is removed from clipboard
 
+            
+            //while (!clipboardEmpty)
+            //{
+            //    Task taskA = Task.Factory.StartNew(() => checkClipboard());
+            //    taskA.Wait();
 
+            //}
             bool deleted = false;
 
             DirectoryInfo[] directories1 = directoryInfo.GetDirectories();
@@ -653,15 +698,33 @@ namespace DirectoryLister
             var newNode = dirsTreeView.SelectedNode.Nodes.Add("New Folder");
             //newNode.Tag = path + @"\" + newNode.Name;
             newNode.Tag = newNode.FullPath;
+            //dirsTreeView.LabelEdit = true;
+            //newNode.BeginEdit();
+            //dirsTreeView.LabelEdit = false;
             //MessageBox.Show(newNode.Tag.ToString());
 
             DirectoryInfo directoryInfo = new DirectoryInfo(path);
             string pathString = path + @"\New Folder";
+            //string pathString = path + @"\" + newNode.Name;
             System.IO.Directory.CreateDirectory(pathString);
 
             MessageBox.Show("Folder created succesfully!");
             return;
-            //newNode.BeginEdit();
+            
+        }
+
+        private bool checkClipboard()
+        {
+            if (!Clipboard.ContainsFileDropList())
+            {
+                clipboardEmpty = true;
+                return clipboardEmpty;
+            }
+            else
+            {
+                clipboardEmpty = false;
+                return clipboardEmpty;
+            }
         }
     }
 
