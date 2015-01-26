@@ -31,7 +31,6 @@ namespace DirectoryLister
             {
                 DriveInfo di = new DriveInfo(drive);
                 int driveImage;
-                //comboBox1.Items.Add(drive);
                 switch (di.DriveType)    //set the drive's icon
                 {
                     case DriveType.CDRom:
@@ -60,16 +59,11 @@ namespace DirectoryLister
             }
 
             label1.Text = "Current Path";
-            //comboBox1.SelectedItem = "C:\\";
             comboBox2.SelectedItem = "File";
         }
 
         private void dirsTreeView_BeforeExpand(object sender, TreeViewCancelEventArgs e)
         {
-
-            //comboBox1.Items.Clear();
-            //DirectoryInfo directoryInfo = new DirectoryInfo(dirsTreeView.SelectedNode.Tag.ToString());
-
             if (e.Node.Nodes.Count > 0)
             {
                 if (e.Node.Nodes[0].Text == "..." && e.Node.Nodes[0].Tag == null)
@@ -79,20 +73,13 @@ namespace DirectoryLister
                     //get the list of sub direcotires
                     string[] dirs = Directory.GetDirectories(e.Node.Tag.ToString());
                     string[] files = Directory.GetFiles(e.Node.Tag.ToString());
-
-
-
-
                     foreach (string dir in dirs)
                     {
                         DirectoryInfo di = new DirectoryInfo(dir);
-                        //comboBox1.Items.Add(dir);
                         TreeNode node = new TreeNode(di.Name, 0, 1);
                         try
                         {
                             node.Tag = dir;  //keep the directory's full path in the tag for use later
-
-                            //if the directory has any sub directories add the place holder
                             if (di.GetDirectories().Count() > 0)
                                 node.Nodes.Add(null, "...", 0, 0);
                         }
@@ -187,23 +174,14 @@ namespace DirectoryLister
 
         private void Copy(object sender, EventArgs e)
         {
-
-            //DirectoryInfo directoryInfo = new DirectoryInfo("C:\\");
-
-
             String temp = dirsTreeView.SelectedNode.Tag.ToString();
             String newString = temp.Substring(0, (temp.LastIndexOf('\\') + 1));
             DirectoryInfo directoryInfo = new DirectoryInfo(newString);
-            //MessageBox.Show(newString);
-
             if (dirsTreeView.SelectedNode != null)
             {
-                //DirectoryInfo directoryInfo = new DirectoryInfo(directoryInfo1);
-
                 DirectoryInfo[] directories = directoryInfo.GetDirectories();
                 foreach (FileInfo file in directoryInfo.GetFiles()) // for files outside folders
                 {
-                    //   MessageBox.Show(file.FullName);
                     if (file.Exists && file.FullName == diree)
                     {
                         System.Collections.Specialized.StringCollection filepath = new System.Collections.Specialized.StringCollection();
@@ -218,8 +196,6 @@ namespace DirectoryLister
                     {
                         try
                         {
-                            // AddDirectorySecurity(directory.FullName, @"Global", FileSystemRights.ReadData, AccessControlType.Allow);
-                            // MessageBox.Show(directory.FullName);
                             Directory.GetAccessControl(directory.FullName);
                             if (directory.FullName == diree)
                             {
@@ -245,13 +221,9 @@ namespace DirectoryLister
                                 }
                             }
                         }
-                        catch (Exception ex)
-                        {
-                            // MessageBox.Show(ex.Message);
-                        }
+                        catch (Exception)
+                        { }
                     }
-
-
                 }
 
             }
@@ -269,23 +241,21 @@ namespace DirectoryLister
 
         private void dirsTreeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
-            //MessageBox.Show(e.Node.Tag.ToString());
             if (e.Node.Tag.ToString() != null)
             {
             diree = e.Node.Tag.ToString();
-            //Path.Text = diree;
             label1.Text = diree; // showing the current path
             }
-            //comboBox1.Items.Clear();
-
             DirectoryInfo directoryInfo = new DirectoryInfo(diree.Substring(0, diree.LastIndexOf('\\') + 1));
-            DirectoryInfo[] directories = directoryInfo.GetDirectories();
+            try
+            {
+                DirectoryInfo[] directories = directoryInfo.GetDirectories();
 
-            //foreach (DirectoryInfo directory in directories)
-            //{
-            //    comboBox1.Items.Add(directory.Name);
-            //}
-
+            }
+            catch (IOException)
+            {
+                
+            }
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -310,14 +280,11 @@ namespace DirectoryLister
                             {
                                 try
                                 {
-                                    //String targetDir = directoryInfo.FullName + directory.Name;
                                     String targetDir = dirsTreeView.SelectedNode.Tag.ToString();
                                     File.Copy(Path.Combine(file.Replace(Path.GetFileName(file), ""), Path.GetFileName(file)), Path.Combine(targetDir, Path.GetFileName(file)), true);
                                 }
                                 catch (UnauthorizedAccessException)
-                                {
-                                    // MessageBox.Show("hahaha");
-                                }
+                                { }
                             }
                             copy = true;
 
@@ -337,12 +304,10 @@ namespace DirectoryLister
 
                 }
             }
-
-            //diree = "C:\\";
             this.Hide();
             dirsTreeView.Refresh();
             MainForm d1 = new MainForm();
-            
+
             d1.Show();
             d1.Refresh();
 
@@ -375,29 +340,17 @@ namespace DirectoryLister
 
         private void button_Search_Click(object sender, EventArgs e)
         {
-
-            //DirectoryInfo directoryInfo = new DirectoryInfo(comboBox1.SelectedItem.ToString());
-
-            //MessageBox.Show(comboBox1.SelectedItem.ToString());
-
-            //DirectoryInfo[] directories = directoryInfo.GetDirectories();
-            //FileInfo[] files = directoryInfo.GetFiles();
-            // System.Collections.Specialized.StringCollection filepaths = new System.Collections.Specialized.StringCollection();
             List<string> filepaths = new List<string>();
             List<string> Sfiles = new List<string>();
             List<string> Allfiles = new List<string>();
             List<string> AllFolders = new List<string>();
             bool found = false;
-
-            //bool found = false;
             try
             {
                 if (comboBox2.SelectedItem.ToString() == "File")
                 {
                     foreach (string file in Directory.EnumerateFiles(diree, textBox_Search.Text, SearchOption.AllDirectories))
                     {
-                        // Display file path.
-                        //Allfiles.Add(file);
                         MessageBox.Show(file);
                         found = true;
                     }
@@ -406,27 +359,12 @@ namespace DirectoryLister
                     {
                         MessageBox.Show(textBox_Search.Text + " not found.");
                     }
-
-                    
-
-                    //var allFiles = Directory.GetFiles(comboBox1.SelectedItem.ToString(), textBox_Search.Text, SearchOption.AllDirectories);
-                    //foreach (String file in allFiles)
-                    //{
-                    //    MessageBox.Show(file);
-                    //}
                 }
 
                 if (comboBox2.SelectedItem.ToString() == "Folder")
                 {
-
-                    //var allFolders = Directory.GetDirectories(comboBox1.SelectedItem.ToString(), textBox_Search.Text, SearchOption.AllDirectories);
-                    //foreach (String folder in allFolders)
-                    //{
-                    //    MessageBox.Show(folder);
-                    //}
                     foreach (string folder in Directory.EnumerateDirectories(diree, textBox_Search.Text, SearchOption.AllDirectories))
                     {
-                        // Display file path.
                         MessageBox.Show(folder);
                         found = true;
                     }
@@ -436,14 +374,12 @@ namespace DirectoryLister
                         MessageBox.Show(textBox_Search.Text + " not found.");
                     }
 
-                    
+
                 }
 
             }
             catch (UnauthorizedAccessException ex)
-            {
-                //MessageBox.Show(ex.Message);
-            }
+            { }
 
             catch (Exception ex)
             {
@@ -456,61 +392,6 @@ namespace DirectoryLister
                 MessageBox.Show(file);
                 found = false;
             }
-
-            ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-            //    foreach (DirectoryInfo directory in directories) 
-            //    {
-            //        if (directory.Name.Contains(textBox_Search.Text))
-            //        {
-            //            MessageBox.Show(directory.FullName);
-            //            found = true;
-            //        }
-            //        try
-            //        {
-            //            foreach (FileInfo file in directory.GetFiles())
-            //            {
-            //                if (file.Name.Contains(textBox_Search.Text))
-            //                {
-
-            //                    found = true;
-            //                    filepaths.Add(file.FullName);
-            //                    MessageBox.Show(file.FullName);
-            //                    break;
-            //                }
-            //            }
-
-            //        }
-            //        catch (Exception ex)
-            //        {
-
-            //        }
-
-            //    }
-
-            //    foreach (FileInfo file in files)
-            //    {
-            //        if (file.Name.Contains(textBox_Search.Text))
-            //        {
-            //            found = true;
-            //            filepaths.Add(file.FullName);
-            //            MessageBox.Show(file.FullName);
-            //            break;
-            //        }
-
-
-            //    }
-
-            //    if (!found)
-            //    {
-            //        MessageBox.Show("\"" + textBox_Search.Text + "\"" + " not found.");
-            //    }
-
-
-
-
         }
 
         private void Delete_Click(object sender, EventArgs e)
@@ -519,9 +400,7 @@ namespace DirectoryLister
             String temp = dirsTreeView.SelectedNode.Tag.ToString();
             String newString = temp.Substring(0, (temp.LastIndexOf('\\') + 1));
             DirectoryInfo directoryInfo = new DirectoryInfo(newString);
-
             bool deleted = false;
-
             DirectoryInfo[] directories = directoryInfo.GetDirectories();
             foreach (FileInfo file in directoryInfo.GetFiles())
             {
@@ -531,14 +410,12 @@ namespace DirectoryLister
                     deleted = true;
                 }
             }
-
             if (directories.Length > 0)
             {
                 foreach (DirectoryInfo directory in directories)
                 {
                     try
                     {
-
                         foreach (FileInfo file in directory.GetFiles())
                         {
                             if (file.Exists && file.Name == dirsTreeView.SelectedNode.Text)
@@ -549,7 +426,6 @@ namespace DirectoryLister
                         }
                     }
                     catch (UnauthorizedAccessException ex) { }
-
                     if (dirsTreeView.SelectedNode.Text == directory.Name)
                     {
                         foreach (FileInfo file in directory.GetFiles())
@@ -569,24 +445,14 @@ namespace DirectoryLister
 
         private void Cut_Click(object sender, EventArgs e)
         {
-
-
-            //DirectoryInfo directoryInfo = new DirectoryInfo("C:\\");
-
-
             String temp = dirsTreeView.SelectedNode.Tag.ToString();
             String newString = temp.Substring(0, (temp.LastIndexOf('\\') + 1));
             DirectoryInfo directoryInfo = new DirectoryInfo(newString);
-            //MessageBox.Show(newString);
-
             if (dirsTreeView.SelectedNode != null)
             {
-                //DirectoryInfo directoryInfo = new DirectoryInfo(directoryInfo1);
-
                 DirectoryInfo[] directories = directoryInfo.GetDirectories();
                 foreach (FileInfo file in directoryInfo.GetFiles()) // for files outside folders
                 {
-                    //   MessageBox.Show(file.FullName);
                     if (file.Exists && file.FullName == diree)
                     {
                         System.Collections.Specialized.StringCollection filepath = new System.Collections.Specialized.StringCollection();
@@ -601,8 +467,6 @@ namespace DirectoryLister
                     {
                         try
                         {
-                            // AddDirectorySecurity(directory.FullName, @"Global", FileSystemRights.ReadData, AccessControlType.Allow);
-                            // MessageBox.Show(directory.FullName);
                             Directory.GetAccessControl(directory.FullName);
                             if (directory.FullName == diree)
                             {
@@ -624,13 +488,11 @@ namespace DirectoryLister
                                     System.Collections.Specialized.StringCollection filepath = new System.Collections.Specialized.StringCollection();
                                     filepath.Add(file.FullName);
                                     Clipboard.SetFileDropList(filepath);
-
                                 }
                             }
                         }
-                        catch (Exception ex)
+                        catch (Exception)
                         {
-                            // MessageBox.Show(ex.Message);
                         }
                     }
 
@@ -640,16 +502,7 @@ namespace DirectoryLister
             }
 
             MessageBox.Show("Paste NOW!!!!"); // can add check to see if file/folder is removed from clipboard
-
-            
-            //while (!clipboardEmpty)
-            //{
-            //    Task taskA = Task.Factory.StartNew(() => checkClipboard());
-            //    taskA.Wait();
-
-            //}
             bool deleted = false;
-
             DirectoryInfo[] directories1 = directoryInfo.GetDirectories();
             foreach (FileInfo file in directoryInfo.GetFiles())
             {
@@ -672,7 +525,6 @@ namespace DirectoryLister
                             deleted = true;
                         }
                     }
-
                     if (dirsTreeView.SelectedNode.Text == directory.Name)
                     {
                         foreach (FileInfo file in directory.GetFiles())
@@ -684,33 +536,20 @@ namespace DirectoryLister
                         deleted = true;
                     }
                 }
-
             }
             if (deleted)
                 dirsTreeView.SelectedNode.Remove();
-
         }
-
         private void Create_Click(object sender, EventArgs e)
         {
             String path = dirsTreeView.SelectedNode.Tag.ToString();
-            //MessageBox.Show(dirsTreeView.SelectedNode.Tag.ToString());
             var newNode = dirsTreeView.SelectedNode.Nodes.Add("New Folder");
-            //newNode.Tag = path + @"\" + newNode.Name;
             newNode.Tag = newNode.FullPath;
-            //dirsTreeView.LabelEdit = true;
-            //newNode.BeginEdit();
-            //dirsTreeView.LabelEdit = false;
-            //MessageBox.Show(newNode.Tag.ToString());
-
             DirectoryInfo directoryInfo = new DirectoryInfo(path);
             string pathString = path + @"\New Folder";
-            //string pathString = path + @"\" + newNode.Name;
             System.IO.Directory.CreateDirectory(pathString);
-
             MessageBox.Show("Folder created succesfully!");
             return;
-            
         }
 
         private bool checkClipboard()
@@ -726,6 +565,6 @@ namespace DirectoryLister
                 return clipboardEmpty;
             }
         }
-    }
 
+    }
 }
