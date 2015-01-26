@@ -120,9 +120,9 @@
             // button1
             // 
             this.button1.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.button1.Location = new System.Drawing.Point(476, 219);
+            this.button1.Location = new System.Drawing.Point(476, 230);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.Size = new System.Drawing.Size(75, 30);
             this.button1.TabIndex = 3;
             this.button1.Text = "Copy";
             this.button1.UseVisualStyleBackColor = true;
@@ -131,9 +131,9 @@
             // button2
             // 
             this.button2.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.button2.Location = new System.Drawing.Point(476, 277);
+            this.button2.Location = new System.Drawing.Point(476, 318);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.Size = new System.Drawing.Size(75, 30);
             this.button2.TabIndex = 4;
             this.button2.Text = "Paste";
             this.button2.UseVisualStyleBackColor = true;
@@ -142,9 +142,9 @@
             // Delete
             // 
             this.Delete.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.Delete.Location = new System.Drawing.Point(476, 248);
+            this.Delete.Location = new System.Drawing.Point(476, 274);
             this.Delete.Name = "Delete";
-            this.Delete.Size = new System.Drawing.Size(75, 23);
+            this.Delete.Size = new System.Drawing.Size(75, 30);
             this.Delete.TabIndex = 5;
             this.Delete.Text = "Delete";
             this.Delete.UseVisualStyleBackColor = true;
@@ -153,9 +153,9 @@
             // Cut
             // 
             this.Cut.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.Cut.Location = new System.Drawing.Point(477, 306);
+            this.Cut.Location = new System.Drawing.Point(476, 360);
             this.Cut.Name = "Cut";
-            this.Cut.Size = new System.Drawing.Size(75, 23);
+            this.Cut.Size = new System.Drawing.Size(75, 30);
             this.Cut.TabIndex = 6;
             this.Cut.Text = "Cut";
             this.Cut.UseVisualStyleBackColor = true;
@@ -166,7 +166,7 @@
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(13, 9);
+            this.label1.Location = new System.Drawing.Point(6, 9);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(88, 17);
             this.label1.TabIndex = 7;
@@ -184,9 +184,9 @@
             // button_Search
             // 
             this.button_Search.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button_Search.Location = new System.Drawing.Point(391, 48);
+            this.button_Search.Location = new System.Drawing.Point(390, 46);
             this.button_Search.Name = "button_Search";
-            this.button_Search.Size = new System.Drawing.Size(75, 23);
+            this.button_Search.Size = new System.Drawing.Size(75, 30);
             this.button_Search.TabIndex = 9;
             this.button_Search.Text = "Search";
             this.button_Search.UseVisualStyleBackColor = true;
@@ -218,7 +218,7 @@
             this.Create.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.Create.Location = new System.Drawing.Point(477, 190);
             this.Create.Name = "Create";
-            this.Create.Size = new System.Drawing.Size(75, 23);
+            this.Create.Size = new System.Drawing.Size(75, 30);
             this.Create.TabIndex = 13;
             this.Create.Text = "Create";
             this.Create.UseVisualStyleBackColor = true;
@@ -238,6 +238,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.LightSlateGray;
             this.ClientSize = new System.Drawing.Size(563, 532);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.Create);
@@ -251,9 +252,10 @@
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.dirsTreeView);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "MainForm";
-            this.Text = "DirectoryLister";
+            this.Text = "KMN File Explorer";
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.contextMenuStrip1.ResumeLayout(false);
             this.contextMenuStrip2.ResumeLayout(false);

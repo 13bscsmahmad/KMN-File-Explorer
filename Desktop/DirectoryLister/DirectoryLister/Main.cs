@@ -59,7 +59,7 @@ namespace DirectoryLister
                 dirsTreeView.Nodes.Add(node);
             }
 
-            label1.Text = "Path";
+            label1.Text = "Current Path";
             //comboBox1.SelectedItem = "C:\\";
             comboBox2.SelectedItem = "File";
         }
